@@ -15,3 +15,10 @@ Thumbs.db
 hugo.exe
 hugo.darwin
 hugo.linux
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
