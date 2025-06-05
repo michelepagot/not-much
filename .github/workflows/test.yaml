@@ -23,7 +23,7 @@ jobs:
       - name: Create a brand new page using this theme
         run: |
           hugo new site xp_not-much
-          echo "theme = 'not-much2'" >> xp_not-much/hugo.toml
+          echo "theme = 'not-much'" >> xp_not-much/hugo.toml
 
       - uses: actions/checkout@v4
         with:
