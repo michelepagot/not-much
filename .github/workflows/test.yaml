@@ -1,0 +1,47 @@
+name: Build no-much theme with Hugo
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        hugo-version:
+          - 'latest'
+          - '0.147.4'
+    steps:
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: ${{ matrix.hugo-version }}
+          extended: true
+
+      - name: Sanity check Hugo
+        run: hugo version
+
+      - name: Create a brand new page using this theme
+        run: |
+          hugo new site xp_not-much
+          echo "theme = 'not-much2'" >> xp_not-much/hugo.toml
+
+      - uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+          path: 'xp_not-much/themes/not-much'
+
+      - name: First empty build
+        working-directory: ${{ github.workspace }}/xp_not-much
+        run:
+          hugo --logLevel debug
+
+      - name: Add new content
+        working-directory: ${{ github.workspace }}/xp_not-much
+        run:
+          hugo --logLevel debug new content content/posts/create-a-blog-with-hugo.md
+
+      - name: Build with content
+        working-directory: ${{ github.workspace }}/xp_not-much
+        run:
+          hugo --logLevel debug build --buildDrafts
